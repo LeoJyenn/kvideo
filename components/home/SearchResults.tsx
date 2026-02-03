@@ -54,7 +54,7 @@ export function SearchResults({
                     sources={availableSources}
                     selectedSources={selectedSources}
                     onToggleSource={toggleSource}
-                    className="mb-6"
+                    className="mb-2"
                 />
             )}
 
@@ -64,7 +64,7 @@ export function SearchResults({
                     badges={typeBadges}
                     selectedTypes={selectedTypes}
                     onToggleType={toggleType}
-                    className="mb-6"
+                    className="mb-2"
                 />
             )}
 

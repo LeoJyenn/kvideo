@@ -79,7 +79,7 @@ export function HistoryItem({ item, onRemove, isPremium = false }: HistoryItemPr
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col gap-1 self-start opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex flex-col gap-1 self-start opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
             {/* Favorite button */}
             <FavoriteButton
               videoId={item.videoId}
