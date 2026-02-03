@@ -28,6 +28,7 @@
     --shadow-sm: 0 1px 2px var(--shadow-color);
     --shadow-md: 0 4px 6px var(--shadow-color);
     --transition-fluid: 0.3s ease;
+    --navbar-height: 64px;
 
     /* Active Theme Variables */
     --bg-color: var(--bg-color-light);

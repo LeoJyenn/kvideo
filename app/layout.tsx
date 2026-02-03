@@ -10,6 +10,7 @@ import { siteConfig } from "@/lib/config/site-config";
 import { AdKeywordsInjector } from "@/components/AdKeywordsInjector";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { ScrollPositionManager } from "@/components/ScrollPositionManager";
+import { StatusBarGlass } from "@/components/StatusBarGlass";
 import fs from 'fs';
 import path from 'path';
 
@@ -77,6 +78,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
+
 
 export default function RootLayout({
   children,
@@ -89,6 +96,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+        <StatusBarGlass />
         <ThemeProvider>
           <PasswordGate hasEnvPassword={!!process.env.ACCESS_PASSWORD}>
             <AdKeywordsWrapper />
