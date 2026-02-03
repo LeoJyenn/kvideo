@@ -58,30 +58,51 @@ export function ScrollPositionManager() {
 
     // Saving logic
     useEffect(() => {
-        let timeoutId: NodeJS.Timeout;
+        let timeoutId: NodeJS.Timeout | null = null;
+        let lastSavedAt = 0;
+        const intervalMs = 200;
+
+        const savePosition = () => {
+            const key = getPageKey();
+            if (window.scrollY > 0) {
+                sessionStorage.setItem(key, window.scrollY.toString());
+            } else {
+                sessionStorage.removeItem(key);
+            }
+            lastSavedAt = Date.now();
+        };
 
         const handleScroll = () => {
             const settings = settingsStore.getSettings();
             if (!settings.rememberScrollPosition) return;
 
-            // Debounce saving to avoid excessive writes to sessionStorage
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                const key = getPageKey();
-                // Only save if we have scrolled
-                if (window.scrollY > 0) {
-                    sessionStorage.setItem(key, window.scrollY.toString());
-                } else {
-                    sessionStorage.removeItem(key);
+            const now = Date.now();
+            const elapsed = now - lastSavedAt;
+
+            if (elapsed >= intervalMs) {
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                    timeoutId = null;
                 }
-            }, 500);
+                savePosition();
+                return;
+            }
+
+            if (!timeoutId) {
+                timeoutId = setTimeout(() => {
+                    timeoutId = null;
+                    savePosition();
+                }, intervalMs - elapsed);
+            }
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            clearTimeout(timeoutId);
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
         };
     }, [getPageKey]);
 
