@@ -11,6 +11,7 @@ import { SourceSelector, SourceInfo } from '@/components/player/SourceSelector';
 import { useVideoPlayer } from '@/lib/hooks/useVideoPlayer';
 import { useHistory } from '@/lib/store/history-store';
 import { FavoritesSidebar } from '@/components/favorites/FavoritesSidebar';
+import { WatchHistorySidebar } from '@/components/history/WatchHistorySidebar';
 import { FavoriteButton } from '@/components/favorites/FavoriteButton';
 import { PlayerNavbar } from '@/components/player/PlayerNavbar';
 import { settingsStore } from '@/lib/store/settings-store';
@@ -22,6 +23,8 @@ function PlayerContent() {
   const router = useRouter();
   const isPremium = searchParams.get('premium') === '1';
   const { addToHistory } = useHistory(isPremium);
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const videoId = searchParams.get('id');
   const source = searchParams.get('source');
@@ -153,7 +156,11 @@ function PlayerContent() {
   return (
     <div className="min-h-screen bg-[var(--bg-color)]">
       {/* Glass Navbar */}
-      <PlayerNavbar isPremium={isPremium} />
+      <PlayerNavbar
+        isPremium={isPremium}
+        onOpenFavorites={() => setIsFavoritesOpen(true)}
+        onOpenHistory={() => setIsHistoryOpen(true)}
+      />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {loading ? (
@@ -274,7 +281,20 @@ function PlayerContent() {
       </main>
 
       {/* Favorites Sidebar - Left */}
-      <FavoritesSidebar isPremium={isPremium} />
+      <FavoritesSidebar
+        isPremium={isPremium}
+        isOpen={isFavoritesOpen}
+        onClose={() => setIsFavoritesOpen(false)}
+        showToggleButton={false}
+      />
+
+      {/* Watch History Sidebar - Right */}
+      <WatchHistorySidebar
+        isPremium={isPremium}
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        showToggleButton={false}
+      />
     </div>
   );
 }

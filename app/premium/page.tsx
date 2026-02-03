@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { SearchForm } from '@/components/search/SearchForm';
 import { NoResults } from '@/components/search/NoResults';
 import { Navbar } from '@/components/layout/Navbar';
@@ -8,6 +8,7 @@ import { SearchResults } from '@/components/home/SearchResults';
 import { usePremiumHomePage } from '@/lib/hooks/usePremiumHomePage';
 import { PremiumContent } from '@/components/premium/PremiumContent';
 import { FavoritesSidebar } from '@/components/favorites/FavoritesSidebar';
+import { WatchHistorySidebar } from '@/components/history/WatchHistorySidebar';
 
 function PremiumHomePage() {
     const {
@@ -22,10 +23,18 @@ function PremiumHomePage() {
         handleReset,
     } = usePremiumHomePage();
 
+    const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
     return (
         <div className="min-h-screen bg-black">
             {/* Glass Navbar */}
-            <Navbar onReset={handleReset} isPremiumMode={true} />
+            <Navbar
+                onReset={handleReset}
+                isPremiumMode={true}
+                onOpenFavorites={() => setIsFavoritesOpen(true)}
+                onOpenHistory={() => setIsHistoryOpen(true)}
+            />
 
             {/* Search Form - Separate from navbar */}
             <div className="max-w-7xl mx-auto px-4 mt-6 mb-8 relative" style={{
@@ -68,7 +77,20 @@ function PremiumHomePage() {
             </main>
 
             {/* Favorites Sidebar - Left */}
-            <FavoritesSidebar isPremium={true} />
+            <FavoritesSidebar
+                isPremium={true}
+                isOpen={isFavoritesOpen}
+                onClose={() => setIsFavoritesOpen(false)}
+                showToggleButton={false}
+            />
+
+            {/* Watch History Sidebar - Right */}
+            <WatchHistorySidebar
+                isPremium={true}
+                isOpen={isHistoryOpen}
+                onClose={() => setIsHistoryOpen(false)}
+                showToggleButton={false}
+            />
         </div>
     );
 }

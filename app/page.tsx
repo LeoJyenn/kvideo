@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { SearchForm } from '@/components/search/SearchForm';
 import { NoResults } from '@/components/search/NoResults';
 import { PopularFeatures } from '@/components/home/PopularFeatures';
@@ -24,6 +24,9 @@ function HomePage() {
     handleReset,
   } = useHomePage();
 
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
   // Real-time latency pinging
   const sourceUrls = useMemo(() =>
     availableSources.map(s => ({ id: s.id, baseUrl: s.id })), // Using id as baseUrl if not available elsewhere
@@ -38,7 +41,11 @@ function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Glass Navbar */}
-      <Navbar onReset={handleReset} />
+      <Navbar
+        onReset={handleReset}
+        onOpenFavorites={() => setIsFavoritesOpen(true)}
+        onOpenHistory={() => setIsHistoryOpen(true)}
+      />
 
       {/* Search Form - Separate from navbar */}
       <div className="max-w-7xl mx-auto px-4 mt-6 mb-8 relative" style={{
@@ -78,10 +85,18 @@ function HomePage() {
       </main>
 
       {/* Favorites Sidebar - Left */}
-      <FavoritesSidebar />
+      <FavoritesSidebar
+        isOpen={isFavoritesOpen}
+        onClose={() => setIsFavoritesOpen(false)}
+        showToggleButton={false}
+      />
 
       {/* Watch History Sidebar - Right */}
-      <WatchHistorySidebar />
+      <WatchHistorySidebar
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        showToggleButton={false}
+      />
     </div>
   );
 }

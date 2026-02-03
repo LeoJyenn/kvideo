@@ -145,3 +145,9 @@ nav {
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
 }
+
+@media (max-width: 640px) and (orientation: portrait) {
+    .player-logo {
+        display: none;
+    }
+}
